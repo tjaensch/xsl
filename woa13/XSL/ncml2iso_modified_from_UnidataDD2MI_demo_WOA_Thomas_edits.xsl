@@ -128,7 +128,7 @@
 				<gco:CharacterString>Granule</gco:CharacterString>
 			</gmd:hierarchyLevelName>
 			<!-- metadata contact is creator -->
-			<gmd:contact gco:nilReason="withheld"/>
+			<!-- <gmd:contact gco:nilReason="withheld"/> -->
 			<gmd:contact>
 				<gmd:CI_ResponsibleParty id="seriesMetadataContact">
 					<gmd:organisationName>
