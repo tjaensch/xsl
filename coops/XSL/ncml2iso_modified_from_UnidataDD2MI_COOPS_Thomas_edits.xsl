@@ -950,7 +950,7 @@
 														</gmd:URL>
 													</gmd:linkage>
 													<gmd:protocol>
-														<gco:CharacterString>HTTP</gco:CharacterString>
+														<gco:CharacterString>UNIDATA:THREDDS</gco:CharacterString>
 													</gmd:protocol>
 													<gmd:name>
 														<gco:CharacterString>THREDDS(TDS)</gco:CharacterString>
@@ -980,7 +980,7 @@
 														</gmd:URL>
 													</gmd:linkage>
 													<gmd:protocol>
-														<gco:CharacterString>HTTP</gco:CharacterString>
+														<gco:CharacterString>OPeNDAP:Hyrax</gco:CharacterString>
 													</gmd:protocol>
 													<gmd:name>
 														<gco:CharacterString>THREDDS OPeNDAP</gco:CharacterString>
