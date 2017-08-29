@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gmi="http://www.isotc211.org/2005/gmi"  xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gss="http://www.isotc211.org/2005/gss" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:date="http://exslt.org/dates-and-times" xmlns:str="http://exslt.org/strings" exclude-result-prefixes='date'>
-	<!-- Updated stylesheet for OneStop project according to OneStop guidelines, removed unused variables, etc.; thomas.jaensch@noaa.gov spring 2016 -->
-	<!--Original stylesheet was from ncISO software http://www.ngdc.noaa.gov/eds/tds/; the xslt was modified by NCEI-MD to work directly with netCDF data; yuanjie.li@noaa.gov 3/1/2013-->
+	
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 	<xsl:variable name="stylesheetVersion" select="'2.21'"/>
 	<xsl:strip-space elements="*"/>
@@ -211,8 +210,6 @@
 			</gmd:contact>
 			<gmd:dateStamp>
 				<gco:Date>
-					<!--xsl:value-of select="current-date()"/-->
-					<!--xsl:value-of select='substring-before(string(current-dateTime()),"T")' /-->
 					<xsl:value-of select="date:date()"/>
 				</gco:Date>
 			</gmd:dateStamp>
@@ -222,70 +219,6 @@
 			<gmd:metadataStandardVersion>
 				<gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
 			</gmd:metadataStandardVersion>
-			<!-- <gmd:dataSetURI>
-				<gco:CharacterString>
-				String of the data set URI
-				</gco:CharacterString>
-			</gmd:dataSetURI> -->
-
-			<gmd:spatialRepresentationInfo>
-				<xsl:choose>
-					<xsl:when test="count($longitudeVariableName) + count($latitudeVariableName) + count($verticalVariableName) + count($timeVariableName)">
-						<gmd:MD_GridSpatialRepresentation>
-							<gmd:numberOfDimensions>
-								<gco:Integer>
-									<xsl:value-of select="count($longitudeVariableName)  + count($latitudeVariableName) + count($verticalVariableName)  + count($timeVariableName) "/>
-								</gco:Integer>
-							</gmd:numberOfDimensions>
-							<xsl:if test="count($longitudeVariableName)">
-								<xsl:call-template name="writeDimension">
-									<xsl:with-param name="dimensionType" select="'column'"/>
-									<xsl:with-param name="dimensionUnits" select="$geospatial_lon_units"/>
-									<xsl:with-param name="dimensionResolution" select="$geospatial_lon_resolution"/>
-									<xsl:with-param name="dimensionSize" select="netcdf/dimension[contains(@name,'lon')]/@length"/>
-								</xsl:call-template>
-							</xsl:if>
-							<xsl:if test="count($latitudeVariableName)">
-								<xsl:call-template name="writeDimension">
-									<xsl:with-param name="dimensionType" select="'row'"/>
-									<xsl:with-param name="dimensionUnits" select="$geospatial_lat_units"/>
-									<xsl:with-param name="dimensionResolution" select="$geospatial_lat_resolution"/>
-									<xsl:with-param name="dimensionSize" select="netcdf/dimension[contains(@name,'lat')]/@length"/>
-								</xsl:call-template>
-							</xsl:if>
-							<xsl:if test="count($verticalVariableName)">
-								<xsl:call-template name="writeDimension">
-									<xsl:with-param name="dimensionType" select="'vertical'"/>
-									<xsl:with-param name="dimensionUnits" select="$verticalUnits"/>
-									<xsl:with-param name="dimensionResolution" select="$verticalResolution"/>
-									<xsl:with-param name="dimensionSize" select="netcdf/dimension[contains(@name,$verticalVariableName)]/@length"/>
-								</xsl:call-template>
-							</xsl:if>
-							<xsl:if test="count($timeVariableName)">
-								<xsl:call-template name="writeDimension">
-									<xsl:with-param name="dimensionType" select="'temporal'"/>
-									<xsl:with-param name="dimensionUnits" select="$temporalUnits"/>
-									<xsl:with-param name="dimensionResolution" select="$timeResolution"/>
-									<xsl:with-param name="dimensionSize" select="netcdf/dimension[contains(@name,$timeVariableName)]/@length"/>
-								</xsl:call-template>
-							</xsl:if>
-							<gmd:cellGeometry>
-                 <gmd:MD_CellGeometryCode  codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CellGeometryCode" codeListValue="area"> 
-									<xsl:value-of select="'area'"/>
-								</gmd:MD_CellGeometryCode>
-							</gmd:cellGeometry>
-              				<gmd:transformationParameterAvailability>
-                     			<gco:Boolean>true</gco:Boolean>
-              				</gmd:transformationParameterAvailability>
-						</gmd:MD_GridSpatialRepresentation>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:attribute name="gco:nilReason">
-							<xsl:value-of select="'missing'"/>
-						</xsl:attribute>
-					</xsl:otherwise>
-				</xsl:choose>
-			</gmd:spatialRepresentationInfo>
 
 			<gmd:identificationInfo>
 				<gmd:MD_DataIdentification id="DataIdentification">
@@ -499,80 +432,6 @@
 						</gmd:MD_Keywords>
 					</gmd:descriptiveKeywords>
 					
-					<!-- <gmd:descriptiveKeywords>
-						<gmd:MD_Keywords>
-							<xsl:for-each select="netcdf/attribute[@name='keywords']">
-								<gmd:keyword>
-									<gco:CharacterString>
-										<xsl:value-of select="./@value[1]"/>
-									</gco:CharacterString>
-								</gmd:keyword>
-							</xsl:for-each>
-							<gmd:type>
-								<gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">
-									<xsl:value-of select="'theme'"/>
-								</gmd:MD_KeywordTypeCode>
-							</gmd:type>
-							<gmd:thesaurusName>
-								<gmd:CI_Citation>
-									<gmd:title>
-											<xsl:choose>
-												<xsl:when test="$stdNameVocabulary = 'CF-16.0'">
-													<xsl:call-template name="writeCharacterString">
-														<xsl:with-param name="stringToWrite" select="'CF-1.6'"/>
-													</xsl:call-template>
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:call-template name="writeCharacterString">
-														<xsl:with-param name="stringToWrite" select="$stdNameVocabulary"/>
-													</xsl:call-template>
-												</xsl:otherwise>
-											</xsl:choose>
-									</gmd:title>
-									<gmd:date gco:nilReason="unknown"/>
-								</gmd:CI_Citation>
-							</gmd:thesaurusName>
-						</gmd:MD_Keywords>
-					</gmd:descriptiveKeywords> -->
-					
-					<!-- <xsl:if test="$standardNameCnt">
-						<gmd:descriptiveKeywords>
-							<gmd:MD_Keywords>
-								<xsl:for-each select="netcdf/variable/attribute[@name='long_name']">
-									<gmd:keyword>
-										<gco:CharacterString>
-											<xsl:value-of select="./@value[1]"/>
-										</gco:CharacterString>
-									</gmd:keyword>
-								</xsl:for-each>
-								<gmd:type>
-                  <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">
-										<xsl:value-of select="'theme'"/>
-									</gmd:MD_KeywordTypeCode>
-								</gmd:type>
-								<gmd:thesaurusName>
-									<gmd:CI_Citation>
-										<gmd:title>
-											<xsl:choose>
-												<xsl:when test="$stdNameVocabulary = 'CF-16.0'">
-													<xsl:call-template name="writeCharacterString">
-														<xsl:with-param name="stringToWrite" select="'CF-1.6'"/>
-													</xsl:call-template>
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:call-template name="writeCharacterString">
-														<xsl:with-param name="stringToWrite" select="$stdNameVocabulary"/>
-													</xsl:call-template>
-												</xsl:otherwise>
-											</xsl:choose>
-										</gmd:title>
-										<gmd:date gco:nilReason="unknown"/>
-									</gmd:CI_Citation>
-								</gmd:thesaurusName>
-							</gmd:MD_Keywords>
-						</gmd:descriptiveKeywords>
-					</xsl:if> -->
-
 					<xsl:if test="count($license)">
 						<gmd:resourceConstraints>
 							<gmd:MD_LegalConstraints>
@@ -720,31 +579,6 @@
 					</gmd:extent>
 				</gmd:MD_DataIdentification>
 			</gmd:identificationInfo>
-
-			<!-- <xsl:if test="$Pathfinderhttp">
-				<xsl:call-template name="writeService">
-					<xsl:with-param name="serviceID" select="'HTTP_SERVER'"/>
-					<xsl:with-param name="serviceTypeName" select="'HTTP'"/>
-					<xsl:with-param name="serviceOperationName" select="'HTTP Client Access'"/>
-					<xsl:with-param name="operationURL" select="$Pathfinderhttp"/>
-				</xsl:call-template>
-			</xsl:if>
-
-			<xsl:if test="'1'">
-				<xsl:call-template name="writeService">
-					<xsl:with-param name="serviceID" select="'FTP'"/>
-					<xsl:with-param name="serviceTypeName" select="'FTP'"/>
-					<xsl:with-param name="serviceOperationName" select="'FTP Client Access'"/>
-					<xsl:with-param name="operationURL" select="$Pathfinderftp"/>
-				</xsl:call-template>
-			</xsl:if>
-			<xsl:if test="$Pathfinderthredds">
-				<xsl:call-template name="writeService">
-					<xsl:with-param name="serviceID" select="'THREDDS'"/>
-					<xsl:with-param name="serviceTypeName" select="'THREDDS DATA SERVER'"/>
-					<xsl:with-param name="serviceOperationName" select="'THREDDS Client Access'"/>
-					<xsl:with-param name="operationURL" select="$Pathfinderthredds"/></xsl:call-template>
-			</xsl:if> -->
 	
 				<!-- WMS -->
 			        <xsl:call-template name="writeService">
@@ -1142,35 +976,7 @@
 												</gmd:CI_Address>
 											</gmd:address>
 										</xsl:if>
-									<!--	<xsl:if test="$url">
-											<gmd:onlineResource>
-												<gmd:CI_OnlineResource>
-													<gmd:linkage>
-														<gmd:URL>
-															<xsl:value-of select="$url"/>
-														</gmd:URL>
-													</gmd:linkage>
-													<gmd:protocol>
-														<gco:CharacterString>http</gco:CharacterString>
-													</gmd:protocol>
-													<gmd:applicationProfile>
-														<gco:CharacterString>web browser</gco:CharacterString>
-													</gmd:applicationProfile>
-													<gmd:name>
-														<gco:CharacterString>File Information</gco:CharacterString>
-													</gmd:name>
-													<gmd:description>
-														<gco:CharacterString>This URL provides a standard HTTP interface for selecting data from this dataset.</gco:CharacterString>
-													</gmd:description>
-													<gmd:function>
-														<gmd:CI_OnLineFunctionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">
-															<xsl:value-of select="'information'"/>
-														</gmd:CI_OnLineFunctionCode>
-													</gmd:function>
-												</gmd:CI_OnlineResource>
-											</gmd:onlineResource>
-										</xsl:if>
-									-->	
+									
 									</gmd:CI_Contact>
 								</xsl:when>
 								<xsl:otherwise>
