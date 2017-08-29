@@ -229,38 +229,18 @@
 									<xsl:with-param name="stringToWrite" select="$title"/>
 								</xsl:call-template>
 							</gmd:title>
-							<xsl:choose>
-								<xsl:when test="$dateCnt">
-									<xsl:if test="count($creatorDate)">
-										<xsl:call-template name="writeDate">
-											<xsl:with-param name="testValue" select="count($creatorDate)"/>
-											<xsl:with-param name="dateToWrite" select="substring($creatorDate,0,11)"/>
-											<xsl:with-param name="dateType" select="'creation'"/>
-										</xsl:call-template>
-									</xsl:if>
-									<xsl:if test="count($issuedDate)">
-										<xsl:call-template name="writeDate">
-											<xsl:with-param name="testValue" select="count($issuedDate)"/>
-											<xsl:with-param name="dateToWrite" select="$issuedDate[1]"/>
-											<xsl:with-param name="dateType" select="'issued'"/>
-										</xsl:call-template>
-									</xsl:if>
-									<xsl:if test="count($modifiedDate)">
-										<xsl:call-template name="writeDate">
-											<xsl:with-param name="testValue" select="count($modifiedDate)"/>
-											<xsl:with-param name="dateToWrite" select="$modifiedDate[1]"/>
-											<xsl:with-param name="dateType" select="'revision'"/>
-										</xsl:call-template>
-									</xsl:if>
-								</xsl:when>
-								<xsl:otherwise>
-									<gmd:date>
-										<xsl:attribute name="gco:nilReason">
-											<xsl:value-of select="'missing'"/>
-										</xsl:attribute>
-									</gmd:date>
-								</xsl:otherwise>
-							</xsl:choose>
+
+                            <gmd:date>
+					            <gmd:CI_Date>
+					              <gmd:date>
+					                <gco:Date><xsl:value-of select="substring($creatorDate,0,11)"/></gco:Date>
+					              </gmd:date>
+					              <gmd:dateType>
+					                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
+					              </gmd:dateType>
+					            </gmd:CI_Date>
+                            </gmd:date>
+							
 							<gmd:identifier>
 								<xsl:choose>
 									<xsl:when test="count($id)">
@@ -311,7 +291,7 @@
 									<xsl:with-param name="organisationName" select="'NCEI'"/>
 									<xsl:with-param name="email" select="'NCEI.info@noaa.gov'"/>
 									<xsl:with-param name="url" select="'http://www.nodc.noaa.gov/SatelliteData/pathfinder4km/'"/>
-									<xsl:with-param name="roleCode" select="netcdf/attribute[@name='contributor_role']/@value"/>
+									<xsl:with-param name="roleCode" select="'originator'"/>
 								</xsl:call-template>
 							</xsl:if>
 							<xsl:if test="$comment">
@@ -893,53 +873,6 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<xsl:template name="writeDate">
-		<xsl:param name="testValue"/>
-		<xsl:param name="dateToWrite"/>
-		<xsl:param name="dateType"/>
-		<xsl:if test="$testValue">
-			<xsl:choose>
-				<xsl:when test="contains(translate($dateToWrite,' ','T'), 'T' ) ">
-					<gmd:date>
-						<gmd:CI_Date>
-							<gmd:date>
-								<gco:Date>
-									<xsl:if test="$dateToWrite=''">
-										<xsl:value-of select="date:date()"/>
-									</xsl:if>
-									<xsl:value-of select="substring(translate($dateToWrite,' ','T'),0,11)"/>
-								</gco:Date>
-							</gmd:date>
-							<gmd:dateType>
-								<gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="$dateType">
-									<xsl:value-of select="$dateType"/>
-								</gmd:CI_DateTypeCode>
-							</gmd:dateType>
-						</gmd:CI_Date>
-					</gmd:date>
-				</xsl:when>
-				<xsl:otherwise>
-					<gmd:date>
-						<gmd:CI_Date>
-							<gmd:date>
-								<gco:Date>
-									<xsl:if test="$dateToWrite=''">
-										<xsl:value-of select="date:date()"/>
-									</xsl:if>
-									<xsl:value-of select="substring(translate($dateToWrite,' ','T'),0,11)"/>
-								</gco:Date>
-							</gmd:date>
-							<gmd:dateType>
-								<gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="$dateType">
-									<xsl:value-of select="$dateType"/>
-								</gmd:CI_DateTypeCode>
-							</gmd:dateType>
-						</gmd:CI_Date>
-					</gmd:date>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
-	</xsl:template>
 
 <!-- "writeResponsibleParty" template definition -->
 	<xsl:template name="writeResponsibleParty">
@@ -976,7 +909,7 @@
 												</gmd:CI_Address>
 											</gmd:address>
 										</xsl:if>
-									
+										
 									</gmd:CI_Contact>
 								</xsl:when>
 								<xsl:otherwise>
@@ -985,8 +918,8 @@
 							</xsl:choose>
 						</gmd:contactInfo>
 						<gmd:role>
-							<gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="$roleCode">
-								<xsl:value-of select="$roleCode"/>
+							<gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="originator">
+								<xsl:value-of select="'originator'"/>
 							</gmd:CI_RoleCode>
 						</gmd:role>
 					</gmd:CI_ResponsibleParty>
@@ -994,82 +927,82 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<gmd:contact>
-<gmd:CI_ResponsibleParty>
-<gmd:organisationName>
-<gco:CharacterString>
-DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
-</gco:CharacterString>
-</gmd:organisationName>
-<gmd:positionName>
-<gco:CharacterString>Data Officer</gco:CharacterString>
-</gmd:positionName>
-<gmd:contactInfo>
-<gmd:CI_Contact>
-<gmd:phone>
-<gmd:CI_Telephone>
-<gmd:voice>
-<gco:CharacterString>301-713-3277</gco:CharacterString>
-</gmd:voice>
-<gmd:facsimile>
-<gco:CharacterString>301-713-3300</gco:CharacterString>
-</gmd:facsimile>
-</gmd:CI_Telephone>
-</gmd:phone>
-<gmd:address>
-<gmd:CI_Address>
-<gmd:deliveryPoint>
-<gco:CharacterString>Federal Building 151 Patton Avenue</gco:CharacterString>
-</gmd:deliveryPoint>
-<gmd:city>
-<gco:CharacterString>Asheville</gco:CharacterString>
-</gmd:city>
-<gmd:administrativeArea>
-<gco:CharacterString>NC</gco:CharacterString>
-</gmd:administrativeArea>
-<gmd:postalCode>
-<gco:CharacterString>28801-5001</gco:CharacterString>
-</gmd:postalCode>
-<gmd:country>
-<gco:CharacterString>USA</gco:CharacterString>
-</gmd:country>
-<gmd:electronicMailAddress>
-<gco:CharacterString>NCEI.info@noaa.gov</gco:CharacterString>
-</gmd:electronicMailAddress>
-</gmd:CI_Address>
-</gmd:address>
-<gmd:onlineResource>
-<gmd:CI_OnlineResource>
-<gmd:linkage>
-<gmd:URL>http://www.ncei.noaa.gov/</gmd:URL>
-</gmd:linkage>
-<gmd:protocol>
-<gco:CharacterString>HTTP</gco:CharacterString>
-</gmd:protocol>
-<gmd:applicationProfile>
-<gco:CharacterString>Standard Internet browser</gco:CharacterString>
-</gmd:applicationProfile>
-<gmd:name>
-<gco:CharacterString>
-NOAA National Centers for Environmental Information website
-</gco:CharacterString>
-</gmd:name>
-<gmd:description>
-<gco:CharacterString>
-Main NCEI website providing links to access data and data services.
-</gco:CharacterString>
-</gmd:description>
-<gmd:function>
-<gmd:CI_OnLineFunctionCode codeList="http://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
-</gmd:function>
-</gmd:CI_OnlineResource>
-</gmd:onlineResource>
-</gmd:CI_Contact>
-</gmd:contactInfo>
-<gmd:role>
-<gmd:CI_RoleCode codeList="http://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian">custodian</gmd:CI_RoleCode>
-</gmd:role>
-</gmd:CI_ResponsibleParty>
-</gmd:contact>
+					<gmd:CI_ResponsibleParty>
+						<gmd:organisationName>
+							<gco:CharacterString>
+								DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
+							</gco:CharacterString>
+						</gmd:organisationName>
+						<gmd:positionName>
+							<gco:CharacterString>Data Officer</gco:CharacterString>
+						</gmd:positionName>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:phone>
+									<gmd:CI_Telephone>
+										<gmd:voice>
+											<gco:CharacterString>301-713-3277</gco:CharacterString>
+										</gmd:voice>
+										<gmd:facsimile>
+											<gco:CharacterString>301-713-3300</gco:CharacterString>
+										</gmd:facsimile>
+									</gmd:CI_Telephone>
+								</gmd:phone>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:deliveryPoint>
+											<gco:CharacterString>Federal Building 151 Patton Avenue</gco:CharacterString>
+										</gmd:deliveryPoint>
+										<gmd:city>
+											<gco:CharacterString>Asheville</gco:CharacterString>
+										</gmd:city>
+										<gmd:administrativeArea>
+											<gco:CharacterString>NC</gco:CharacterString>
+										</gmd:administrativeArea>
+										<gmd:postalCode>
+											<gco:CharacterString>28801-5001</gco:CharacterString>
+										</gmd:postalCode>
+										<gmd:country>
+											<gco:CharacterString>USA</gco:CharacterString>
+										</gmd:country>
+										<gmd:electronicMailAddress>
+											<gco:CharacterString>NCEI.info@noaa.gov</gco:CharacterString>
+										</gmd:electronicMailAddress>
+									</gmd:CI_Address>
+								</gmd:address>
+								<gmd:onlineResource>
+									<gmd:CI_OnlineResource>
+										<gmd:linkage>
+											<gmd:URL>http://www.ncei.noaa.gov/</gmd:URL>
+										</gmd:linkage>
+										<gmd:protocol>
+											<gco:CharacterString>HTTP</gco:CharacterString>
+										</gmd:protocol>
+										<gmd:applicationProfile>
+											<gco:CharacterString>Standard Internet browser</gco:CharacterString>
+										</gmd:applicationProfile>
+										<gmd:name>
+											<gco:CharacterString>
+												NOAA National Centers for Environmental Information website
+											</gco:CharacterString>
+										</gmd:name>
+										<gmd:description>
+											<gco:CharacterString>
+												Main NCEI website providing links to access data and data services.
+											</gco:CharacterString>
+										</gmd:description>
+										<gmd:function>
+											<gmd:CI_OnLineFunctionCode codeList="http://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+										</gmd:function>
+									</gmd:CI_OnlineResource>
+								</gmd:onlineResource>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+						<gmd:role>
+							<gmd:CI_RoleCode codeList="http://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian">custodian</gmd:CI_RoleCode>
+						</gmd:role>
+					</gmd:CI_ResponsibleParty>
+				</gmd:contact>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -1212,36 +1145,18 @@ Main NCEI website providing links to access data and data services.
 								<xsl:with-param name="stringToWrite" select="$title"/>
 							</xsl:call-template>
 						</gmd:title>
-						<xsl:choose>
-							<xsl:when test="$dateCnt">
-								<xsl:if test="count($creatorDate)">
-									<xsl:call-template name="writeDate">
-										<xsl:with-param name="testValue" select="count($creatorDate)"/>
-										<xsl:with-param name="dateToWrite" select="substring($creatorDate,0,11)"/>
-										<xsl:with-param name="dateType" select="'creation'"/>
-									</xsl:call-template>
-								</xsl:if>
-								<xsl:if test="count($issuedDate)">
-									<xsl:call-template name="writeDate">
-										<xsl:with-param name="testValue" select="count($issuedDate)"/>
-										<xsl:with-param name="dateToWrite" select="$issuedDate"/>
-										<xsl:with-param name="dateType" select="'issued'"/>
-									</xsl:call-template>
-								</xsl:if>
-								<xsl:if test="count($modifiedDate)">
-									<xsl:call-template name="writeDate">
-										<xsl:with-param name="testValue" select="count($modifiedDate)"/>
-										<xsl:with-param name="dateToWrite" select="substring($modifiedDate,1,10)"/>
-										<xsl:with-param name="dateType" select="'revision'"/>
-									</xsl:call-template>
-								</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-								<gmd:date>
-									<xsl:attribute name="gco:nilReason"><xsl:value-of select="'missing'"/></xsl:attribute>
-								</gmd:date>
-							</xsl:otherwise>
-						</xsl:choose>
+						
+                        <gmd:date>
+					        <gmd:CI_Date>
+					            <gmd:date>
+					              <gco:Date><xsl:value-of select="substring($creatorDate,0,11)"/></gco:Date>
+					            </gmd:date>
+					            <gmd:dateType>
+					              <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
+					            </gmd:dateType>
+					        </gmd:CI_Date>
+                        </gmd:date>
+
 						<xsl:if test="$creatorTotal">
 							<xsl:call-template name="writeResponsibleParty">
 								<xsl:with-param name="tagName" select="'gmd:citedResponsibleParty'"/>
