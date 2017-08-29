@@ -134,9 +134,7 @@
 			<gmd:contact>
 				<gmd:CI_ResponsibleParty id="seriesMetadataContact">
 					<gmd:organisationName>
-						<gco:CharacterString>
-							DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
-						</gco:CharacterString>
+						<gco:CharacterString>DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce</gco:CharacterString>
 					</gmd:organisationName>
 					<gmd:positionName>
 						<gco:CharacterString>Data Officer</gco:CharacterString>
@@ -929,9 +927,7 @@
 				<gmd:contact>
 					<gmd:CI_ResponsibleParty>
 						<gmd:organisationName>
-							<gco:CharacterString>
-								DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
-							</gco:CharacterString>
+							<gco:CharacterString>DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce</gco:CharacterString>
 						</gmd:organisationName>
 						<gmd:positionName>
 							<gco:CharacterString>Data Officer</gco:CharacterString>
