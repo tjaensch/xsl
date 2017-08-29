@@ -122,7 +122,7 @@
 				<gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
 			</gmd:characterSet>
 			<gmd:parentIdentifier>
-				<gmx:Anchor xlink:href="http://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.nodc:NDBC-COOPS" xlink:actuate="onRequest" xlink:title="Collection ID">gov.noaa.nodc:NGDC-GHCN</gmx:Anchor>
+				<gmx:Anchor xlink:href="https://www1.ncdc.noaa.gov/pub/data/metadata/published/geoportal/iso/xml/C00861.xml" xlink:actuate="onRequest" xlink:title="Collection ID">NGDC-GHCN</gmx:Anchor>
 			</gmd:parentIdentifier>
 			<gmd:hierarchyLevel>
 				<gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
@@ -485,13 +485,17 @@
 								<gmd:MD_KeywordTypeCode codeList="http://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="platform">platform</gmd:MD_KeywordTypeCode>
 							</gmd:type>
 							<gmd:thesaurusName>
-								<gmd:CI_Citation>
-									<gmd:title>
-										<gco:CharacterString>TBD</gco:CharacterString>
-									</gmd:title>
-									<gmd:date gco:nilReason="inapplicable"/>
-								</gmd:CI_Citation>
-							</gmd:thesaurusName>
+									<gmd:CI_Citation>
+										<gmd:title>
+											<xsl:call-template name="writeCharacterString">
+												<xsl:with-param name="stringToWrite" select="$keywordsVocabulary"/>
+											</xsl:call-template>
+										</gmd:title>
+										<gmd:date>
+											<xsl:attribute name="gco:nilReason"><xsl:value-of select="'unknown'"/></xsl:attribute>
+										</gmd:date>
+									</gmd:CI_Citation>
+								</gmd:thesaurusName>
 						</gmd:MD_Keywords>
 					</gmd:descriptiveKeywords>
 					
