@@ -121,11 +121,8 @@
 				<gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
 			</gmd:characterSet>
 			<gmd:parentIdentifier>
-				<gmx:Anchor xlink:href="https://www1.ncdc.noaa.gov/pub/data/metadata/published/geoportal/iso/xml/C00861.xml" xlink:actuate="onRequest" xlink:title="Collection ID">NGDC-GHCN</gmx:Anchor>
+				<gmx:Anchor xlink:href="https://doi.org/10.7289/V5D21VHZ" xlink:title="Parent DOI" xlink:actuate="onRequest">doi:10.7289/V5D21VHZ</gmx:Anchor>
 			</gmd:parentIdentifier>
-			<gmd:hierarchyLevel>
-				<gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
-			</gmd:hierarchyLevel>
 			<gmd:hierarchyLevelName>
 				<gco:CharacterString>Granule</gco:CharacterString>
 			</gmd:hierarchyLevelName>
@@ -1152,29 +1149,6 @@
 					            </gmd:dateType>
 					        </gmd:CI_Date>
                         </gmd:date>
-
-						<xsl:if test="$creatorTotal">
-							<xsl:call-template name="writeResponsibleParty">
-								<xsl:with-param name="tagName" select="'gmd:citedResponsibleParty'"/>
-								<xsl:with-param name="testValue" select="$creatorTotal"/>
-								<xsl:with-param name="individualName" select="$creatorName[1]"/>
-								<xsl:with-param name="organisationName" select="$institution"/>
-								<xsl:with-param name="email" select="$creatorEmail[1]"/>
-								<xsl:with-param name="url" select="$creatorURL[1]"/>
-								<xsl:with-param name="roleCode" select="'originator'"/>
-							</xsl:call-template>
-						</xsl:if>
-						<xsl:if test="$contributorTotal">
-							<xsl:call-template name="writeResponsibleParty">
-								<xsl:with-param name="tagName" select="'gmd:citedResponsibleParty'"/>
-								<xsl:with-param name="testValue" select="$contributorTotal"/>
-								<xsl:with-param name="individualName" select="$contributorName[1]"/>
-								<xsl:with-param name="organisationName"/>
-								<xsl:with-param name="email"/>
-								<xsl:with-param name="url"/>
-								<xsl:with-param name="roleCode" select="netcdf/attribute[@name='contributor_role']/@value"/>
-							</xsl:call-template>
-						</xsl:if>
 					</gmd:CI_Citation>
 				</gmd:citation>
 				<gmd:abstract>
