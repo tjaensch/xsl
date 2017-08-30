@@ -25,9 +25,9 @@
 	<xsl:variable name="thredds_netcdfsubsetCnt" select="count(netcdf/group[@name='Dataservicelinks']/group[@name='services']/attribute[@name='nccs_service'])"/>
 	
 <!--NCEI-MD added for extra service links -->
-	<xsl:variable name="Pathfinderthredds" select="translate(normalize-space(concat('http://data.nodc.noaa.gov/thredds/catalog/', netcdf/path, 'catalog.html?dataset=',netcdf/path,netcdf/title,'.nc')),' ','')"/>
-	<xsl:variable name="Pathfinderhttp" select="translate(normalize-space(concat('http://data.nodc.noaa.gov/', netcdf/path,netcdf/title,'.nc')),' ','')"/>
-	<xsl:variable name="Pathfinderopendap" select="translate(normalize-space(concat('http://data.nodc.noaa.gov/thredds/dodsC/', netcdf/path,netcdf/title,'.nc.html')),' ','')"/>
+	<xsl:variable name="Pathfinderthredds" select="translate(normalize-space(concat('https://data.nodc.noaa.gov/thredds/catalog/', netcdf/path, 'catalog.html?dataset=',netcdf/path,netcdf/title,'.nc')),' ','')"/>
+	<xsl:variable name="Pathfinderhttp" select="translate(normalize-space(concat('https://data.nodc.noaa.gov/', netcdf/path,netcdf/title,'.nc')),' ','')"/>
+	<xsl:variable name="Pathfinderopendap" select="translate(normalize-space(concat('https://data.nodc.noaa.gov/thredds/dodsC/', netcdf/path,netcdf/title,'.nc.html')),' ','')"/>
 	<xsl:variable name="Pathfinderftp" select="translate(normalize-space(concat('ftp://ftp.nodc.noaa.gov/pub/data.nodc/',netcdf/path,netcdf/title,'.nc')),' ','')"/>
 	
 	<!--Added for Cloud pilot project-->
@@ -235,67 +235,6 @@
 					              </gmd:dateType>
 					            </gmd:CI_Date>
                             </gmd:date>
-							
-							<gmd:identifier>
-								<xsl:choose>
-									<xsl:when test="count($id)">
-										<gmd:MD_Identifier>
-											<xsl:if test="$title">
-												<gmd:authority>
-													<gmd:CI_Citation>
-														<gmd:title>
-															<gco:CharacterString>
-																<xsl:value-of select="$title"/>
-															</gco:CharacterString>
-														</gmd:title>
-														<gmd:date>
-															<xsl:attribute name="gco:nilReason"><xsl:value-of select="'inapplicable'"/></xsl:attribute>
-														</gmd:date>
-													</gmd:CI_Citation>
-												</gmd:authority>
-											</xsl:if>
-											<gmd:code>
-												<!--  Just use THREDDs id as it's guaranteed to be unique -->
-												<gco:CharacterString>
-													<xsl:value-of select="netcdf/group[@name='THREDDSMetadata']/attribute[@name='id']/@value"/>
-												</gco:CharacterString>
-											</gmd:code>
-										</gmd:MD_Identifier>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:attribute name="gco:nilReason"><xsl:value-of select="'missing'"/></xsl:attribute>
-									</xsl:otherwise>
-								</xsl:choose>
-							</gmd:identifier>
-							<xsl:if test="$creatorTotal">
-								<xsl:call-template name="writeResponsibleParty">
-									<xsl:with-param name="tagName" select="'gmd:citedResponsibleParty'"/>
-									<xsl:with-param name="testValue" select="$creatorTotal"/>
-									<xsl:with-param name="individualName" select="$creatorName"/>
-									<xsl:with-param name="organisationName" select="$institution"/>
-									<xsl:with-param name="email" select="$creatorEmail"/>
-									<xsl:with-param name="url" select="$creatorURL"/>
-									<xsl:with-param name="roleCode" select="'originator'"/>
-								</xsl:call-template>
-							</xsl:if>
-							<xsl:if test="$contributorTotal">
-								<xsl:call-template name="writeResponsibleParty">
-									<xsl:with-param name="tagName" select="'gmd:citedResponsibleParty'"/>
-									<xsl:with-param name="testValue" select="$contributorTotal"/>
-									<xsl:with-param name="individualName" select="$contributorName"/>
-									<xsl:with-param name="organisationName" select="'NCEI'"/>
-									<xsl:with-param name="email" select="'NCEI.info@noaa.gov'"/>
-									<xsl:with-param name="url" select="'http://www.nodc.noaa.gov/SatelliteData/pathfinder4km/'"/>
-									<xsl:with-param name="roleCode" select="'originator'"/>
-								</xsl:call-template>
-							</xsl:if>
-							<xsl:if test="$comment">
-								<gmd:otherCitationDetails>
-									<xsl:call-template name="writeCharacterString">
-										<xsl:with-param name="stringToWrite" select="$comment[1]"/>
-									</xsl:call-template>
-								</gmd:otherCitationDetails>
-							</xsl:if>
 						</gmd:CI_Citation>
 					</gmd:citation>
 					<gmd:abstract>
@@ -303,6 +242,7 @@
 							<xsl:with-param name="stringToWrite" select="$summary[1]"/>
 						</xsl:call-template>
 					</gmd:abstract>
+					
 					<xsl:if test="count($acknowledgment)">
 						<gmd:credit>
 							<xsl:call-template name="writeCharacterString">
@@ -310,17 +250,6 @@
 							</xsl:call-template>
 						</gmd:credit>
 					</xsl:if>
-					<!-- point of contact is creator -->
-					<xsl:call-template name="writeResponsibleParty">
-						<xsl:with-param name="tagName" select="'gmd:pointOfContact'"/>
-						<xsl:with-param name="testValue" select="$creatorTotal"/>
-						<xsl:with-param name="individualName" select="$creatorName"/>
-						<xsl:with-param name="organisationName" select="$institution"/>
-						<xsl:with-param name="email" select="$creatorEmail"/>
-						<xsl:with-param name="url" select="$creatorURL"/>
-						<xsl:with-param name="roleCode" select="'pointOfContact'"/>
-					</xsl:call-template>
-
 					
 					<xsl:if test="$browsegraphic!=''">
 					<gmd:graphicOverview>
@@ -340,29 +269,20 @@
 					</gmd:graphicOverview>
 					</xsl:if>
 					
-					
-						<xsl:if test="count($keywords)">
+					<xsl:if test="$standardNameCnt">
 						<gmd:descriptiveKeywords>
 							<gmd:MD_Keywords>
-								<xsl:variable name="keywordDelimiter">
-									<xsl:choose>
-										<xsl:when test="(contains($keywords,',') or contains($keywords,'&gt;'))">
-											<xsl:value-of select="','"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="' '"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:variable>
-								<xsl:for-each select="str:tokenize($keywords,$keywordDelimiter)">
+								<xsl:for-each select="netcdf/variable/attribute[@name='long_name']">
+									<xsl:if test="not(contains(./@value, 'flag'))">
 									<gmd:keyword>
 										<gco:CharacterString>
-											<xsl:value-of select="."/>
+											<xsl:value-of select="./@value"/>
 										</gco:CharacterString>
 									</gmd:keyword>
+									</xsl:if>
 								</xsl:for-each>
 								<gmd:type>
-                 					<gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">
+									<gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">
 										<xsl:value-of select="'theme'"/>
 									</gmd:MD_KeywordTypeCode>
 								</gmd:type>
@@ -370,80 +290,19 @@
 									<gmd:CI_Citation>
 										<gmd:title>
 											<xsl:call-template name="writeCharacterString">
-												<xsl:with-param name="stringToWrite" select="$keywordsVocabulary"/>
+												<xsl:with-param name="stringToWrite" select="$stdNameVocabulary"/>
 											</xsl:call-template>
 										</gmd:title>
-										<gmd:date>
-											<xsl:attribute name="gco:nilReason"><xsl:value-of select="'unknown'"/></xsl:attribute>
-										</gmd:date>
+										<gmd:date gco:nilReason="unknown"/>
 									</gmd:CI_Citation>
 								</gmd:thesaurusName>
 							</gmd:MD_Keywords>
 						</gmd:descriptiveKeywords>
 					</xsl:if>
 
-					<gmd:descriptiveKeywords>
-						<gmd:MD_Keywords>
-							<gmd:keyword>
-								<xsl:call-template name="writeCharacterString">
-									<xsl:with-param name="stringToWrite" select="substring($fileidentifier, 5, 7)"/>
-								</xsl:call-template>
-							</gmd:keyword>
-							<gmd:type>
-								<gmd:MD_KeywordTypeCode codeList="http://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="platform">platform</gmd:MD_KeywordTypeCode>
-							</gmd:type>
-							<gmd:thesaurusName>
-									<gmd:CI_Citation>
-										<gmd:title>
-											<xsl:call-template name="writeCharacterString">
-												<xsl:with-param name="stringToWrite" select="$keywordsVocabulary"/>
-											</xsl:call-template>
-										</gmd:title>
-										<gmd:date>
-											<xsl:attribute name="gco:nilReason"><xsl:value-of select="'unknown'"/></xsl:attribute>
-										</gmd:date>
-									</gmd:CI_Citation>
-								</gmd:thesaurusName>
-						</gmd:MD_Keywords>
-					</gmd:descriptiveKeywords>
-					
-					<xsl:if test="count($license)">
-						<gmd:resourceConstraints>
-							<gmd:MD_LegalConstraints>
-								<gmd:useLimitation>
-									<gco:CharacterString>
-										<xsl:value-of select="$license[1]"/>
-									</gco:CharacterString>
-								</gmd:useLimitation>
-							</gmd:MD_LegalConstraints>
-						</gmd:resourceConstraints>
-					</xsl:if>
-					<gmd:resourceConstraints>
-					    <gmd:MD_LegalConstraints>
-					        <gmd:useConstraints>
-					            <gmd:MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions" codeSpace="008">other Restrictions</gmd:MD_RestrictionCode>
-					        </gmd:useConstraints>
-					        <gmd:otherConstraints>
-					            <gco:CharacterString>Use liability: NOAA and NCEI cannot provide any warranty as to the accuracy, reliability, or completeness of furnished data. Users assume responsibility to determine the usability of these data. The user is responsible for the results of any application of this data for other than its intended purpose.</gco:CharacterString>
-					        </gmd:otherConstraints>
-					    </gmd:MD_LegalConstraints>
-					</gmd:resourceConstraints>
-					<gmd:resourceConstraints>
-					    <gmd:MD_LegalConstraints>
-					        <gmd:accessConstraints>
-					            <gmd:MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions" codeSpace="008">other Restrictions</gmd:MD_RestrictionCode>
-					        </gmd:accessConstraints>
-					        <gmd:otherConstraints>
-					            <gco:CharacterString>Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.</gco:CharacterString>
-					        </gmd:otherConstraints>
-					    </gmd:MD_LegalConstraints>
-					</gmd:resourceConstraints>
 					<gmd:language>
 						<gco:CharacterString>eng; USA</gco:CharacterString>
 					</gmd:language>
-					<gmd:topicCategory>
-						<gmd:MD_TopicCategoryCode>climatologyMeteorologyAtmosphere</gmd:MD_TopicCategoryCode>
-					</gmd:topicCategory>
 					<gmd:extent>
 						<xsl:choose>
 							<xsl:when test="$extentTotal">
@@ -580,86 +439,20 @@
 			        </xsl:call-template>
 			      </xsl:if>
 
-			    <xsl:if test="$physicalMeasurementCnt">
-				<gmd:contentInfo>
-					<gmi:MI_CoverageDescription>
-						<gmd:attributeDescription>
-							<xsl:attribute name="gco:nilReason"><xsl:value-of select="'unknown'"/></xsl:attribute>
-						</gmd:attributeDescription>
-						<gmd:contentType>
-              				<gmd:MD_CoverageContentTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CoverageContentTypeCode" codeListValue="physicalMeasurement">
-								<xsl:value-of select="'physicalMeasurement'"/>
-							</gmd:MD_CoverageContentTypeCode>
-						</gmd:contentType>
-						<xsl:for-each select="netcdf/variable[not(contains((translate(@name,ABCDEFGHIJKLMNOPQRSTUVWXYZ,abcdefghijklmnopqrstuvwxyz)),'_qc'))]">
-							<xsl:if test="@name != @shape">
-								<xsl:call-template name="writeVariableDimensions">
-									<xsl:with-param name="variableName" select="./@name"/>
-									<xsl:with-param name="variableLongName" select="./attribute[@name='long_name']/@value"/>
-									<xsl:with-param name="variableStandardName" select="./attribute[@name='standard_name']/@value"/>
-									<xsl:with-param name="variableType" select="./@type"/>
-									<xsl:with-param name="variableUnits" select="./attribute[@name='units']/@value"/>
-								</xsl:call-template>
-							</xsl:if>
-						</xsl:for-each>
-						<xsl:for-each select="netcdf/variable[not(contains((translate(@name,ABCDEFGHIJKLMNOPQRSTUVWXYZ,abcdefghijklmnopqrstuvwxyz)),'_qc'))]">
-							<xsl:if test="@name != @shape">
-								<xsl:call-template name="writeVariableRanges">
-									<xsl:with-param name="variableName" select="./@name"/>
-									<xsl:with-param name="variableLongName" select="./attribute[@name='long_name']/@value"/>
-									<xsl:with-param name="variableStandardName" select="./attribute[@name='standard_name']/@value"/>
-									<xsl:with-param name="variableType" select="./@type"/>
-									<xsl:with-param name="variableUnits" select="./attribute[@name='units']/@value"/>
-								</xsl:call-template>
-							</xsl:if>
-						</xsl:for-each>
-					</gmi:MI_CoverageDescription>
-				</gmd:contentInfo>
-			</xsl:if>
-			<xsl:if test="$qualityInformationCnt">
-				<gmd:contentInfo>
-					<gmi:MI_CoverageDescription>
-						<gmd:attributeDescription>
-							<xsl:attribute name="gco:nilReason"><xsl:value-of select="'unknown'"/></xsl:attribute>
-						</gmd:attributeDescription>
-
-
-
-
-						<gmd:contentType>
-          				    <gmd:MD_CoverageContentTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CoverageContentTypeCode" codeListValue="qualityInformation">
-								<xsl:value-of select="'qualityInformation'"/>
-							</gmd:MD_CoverageContentTypeCode>
-						</gmd:contentType>
-						<xsl:for-each select="netcdf/variable[not(contains((translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')),'_qc'))]">
-							<xsl:if test="@name != @shape">
-								<xsl:call-template name="writeVariableDimensions">
-									<xsl:with-param name="variableName" select="./@name"/>
-									<xsl:with-param name="variableLongName" select="./attribute[@name='long_name']/@value"/>
-									<xsl:with-param name="variableStandardName" select="./attribute[@name='standard_name']/@value"/>
-									<xsl:with-param name="variableType" select="./@type"/>
-									<xsl:with-param name="variableUnits" select="./attribute[@name='units']/@value"/>
-								</xsl:call-template>
-							</xsl:if>
-						</xsl:for-each>
-						<xsl:for-each select="netcdf/variable[not(contains((translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')),'_qc'))]">
-							<xsl:if test="@name != @shape">
-								<xsl:call-template name="writeVariableRanges">
-									<xsl:with-param name="variableName" select="./@name"/>
-									<xsl:with-param name="variableLongName" select="./attribute[@name='long_name']/@value"/>
-									<xsl:with-param name="variableStandardName" select="./attribute[@name='standard_name']/@value"/>
-									<xsl:with-param name="variableType" select="./@type"/>
-									<xsl:with-param name="variableUnits" select="./attribute[@name='units']/@value"/>
-								</xsl:call-template>
-							</xsl:if>
-						</xsl:for-each>
-					</gmi:MI_CoverageDescription>
-				</gmd:contentInfo>
-			</xsl:if>
 			<!-- distributor is netCDF publisher -->
 			<xsl:if test="$serviceMax">
 				<gmd:distributionInfo>
 					<gmd:MD_Distribution>
+						<gmd:distributionFormat>
+							<gmd:MD_Format>
+								<gmd:name>
+									<gco:CharacterString>NetCDF</gco:CharacterString>
+								</gmd:name>
+								<gmd:version>
+									<gco:CharacterString>4</gco:CharacterString>
+								</gmd:version>
+							</gmd:MD_Format>
+						</gmd:distributionFormat>
 						<gmd:distributor>
 							<gmd:MD_Distributor>
 								<xsl:choose>
@@ -829,7 +622,7 @@
 							<gmd:LI_Lineage>
 								<gmd:statement>
 									<xsl:call-template name="writeCharacterString">
-										<xsl:with-param name="stringToWrite" select="$history[1]"/>
+										<xsl:with-param name="stringToWrite" select="$comment"/>
 									</xsl:call-template>
 								</gmd:statement>
 							</gmd:LI_Lineage>
@@ -1128,85 +921,6 @@
 		<xsl:param name="serviceOperationName"/>
 		<xsl:param name="operationURL"/>
 		<xsl:param name="operationNode"/>
-		<gmd:identificationInfo>
-			<xsl:element name="srv:SV_ServiceIdentification">
-				<xsl:attribute name="id"><xsl:value-of select="$serviceID"/></xsl:attribute>
-				<gmd:citation>
-					<gmd:CI_Citation>
-						<gmd:title>
-							<xsl:call-template name="writeCharacterString">
-								<xsl:with-param name="stringToWrite" select="$title"/>
-							</xsl:call-template>
-						</gmd:title>
-						
-                        <gmd:date>
-					        <gmd:CI_Date>
-					            <gmd:date>
-					              <gco:Date><xsl:value-of select="substring($creatorDate,0,11)"/></gco:Date>
-					            </gmd:date>
-					            <gmd:dateType>
-					              <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
-					            </gmd:dateType>
-					        </gmd:CI_Date>
-                        </gmd:date>
-					</gmd:CI_Citation>
-				</gmd:citation>
-				<gmd:abstract>
-					<xsl:choose>
-						<xsl:when test="count(netcdf/attribute[@name='summary']) > 0">
-							<xsl:call-template name="writeCharacterString">
-								<xsl:with-param name="stringToWrite" select="netcdf/attribute[@name='summary']/@value"/>
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="writeCharacterString">
-								<xsl:with-param name="stringToWrite" select="netcdf/group[@name='THREDDSMetadata']/group[@name='documentation']/group[@name='document']/attribute[@type='summary']/@value"/>
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
-				</gmd:abstract>
-				<srv:serviceType>					<gco:LocalName>
-						<xsl:value-of select="$serviceTypeName"/>
-					</gco:LocalName>
-				</srv:serviceType>
-
-				<srv:couplingType>
-					<srv:SV_CouplingType codeList="http://www.tc211.org/ISO19139/resources/codeList.xml#SV_CouplingType" codeListValue="tight">tight</srv:SV_CouplingType>
-				</srv:couplingType>
-				<srv:containsOperations>
-					<srv:SV_OperationMetadata>
-						<srv:operationName>
-							<gco:CharacterString>
-								<xsl:value-of select="$serviceOperationName"/>
-							</gco:CharacterString>
-						</srv:operationName>
-						<srv:DCP gco:nilReason="unknown"/>
-						<srv:connectPoint>
-							<gmd:CI_OnlineResource>
-								<gmd:linkage>
-									<gmd:URL>
-										<xsl:value-of select="$operationURL"/>
-									</gmd:URL>
-								</gmd:linkage>
-								<gmd:name>
-									<gco:CharacterString>
-										<xsl:value-of select="$serviceID"/>
-									</gco:CharacterString>
-								</gmd:name>
-								<gmd:description>
-									<gco:CharacterString>
-										<xsl:value-of select="$serviceTypeName"/>
-									</gco:CharacterString>
-								</gmd:description>
-								<gmd:function>
-									<gmd:CI_OnLineFunctionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="download">download</gmd:CI_OnLineFunctionCode>
-								</gmd:function>
-							</gmd:CI_OnlineResource>
-						</srv:connectPoint>
-					</srv:SV_OperationMetadata>
-				</srv:containsOperations>
-				<srv:operatesOn xlink:href="#DataIdentification"/>
-			</xsl:element>
-		</gmd:identificationInfo>
+		
 	</xsl:template>
 </xsl:stylesheet>
