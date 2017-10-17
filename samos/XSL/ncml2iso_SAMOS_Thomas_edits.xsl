@@ -292,7 +292,7 @@
 						<gmd:CI_Citation>
 							<gmd:title>
 								<xsl:call-template name="writeCharacterString">
-									<xsl:with-param name="stringToWrite" select="concat($datasetname,'.',$title)"/>
+									<xsl:with-param name="stringToWrite" select="concat('Atlantis meteorological data for ', substring(substring-after($fileidentifier, '_'), 0, 5), '-', substring(substring-after($fileidentifier, '_'), 5, 2), '-', substring(substring-after($fileidentifier, '_'), 7, 2), ', quality control version ', substring-after($fileidentifier, 'v'))"/>
 								</xsl:call-template>
 							</gmd:title>
 							<xsl:choose>
