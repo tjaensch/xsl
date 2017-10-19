@@ -430,50 +430,9 @@
 					</gmd:graphicOverview>
 					</xsl:if>
 
-					<xsl:if test="not($keywords)">
-						<gmd:descriptiveKeywords />
-					</xsl:if>
+					
 
-					<xsl:if test="count($keywords)">
-						<gmd:descriptiveKeywords>
-							<gmd:MD_Keywords>
-								<xsl:variable name="keywordDelimiter">
-									<xsl:choose>
-										<xsl:when test="(contains($keywords,',') or contains($keywords,'&gt;'))">
-											<xsl:value-of select="','"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="' '"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:variable>
-								<xsl:for-each select="str:tokenize($keywords,$keywordDelimiter)">
-									<gmd:keyword>
-										<gco:CharacterString>
-											<xsl:value-of select="."/>
-										</gco:CharacterString>
-									</gmd:keyword>
-								</xsl:for-each>
-								<gmd:type>
-                 					<gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">
-										<xsl:value-of select="'theme'"/>
-									</gmd:MD_KeywordTypeCode>
-								</gmd:type>
-								<gmd:thesaurusName>
-									<gmd:CI_Citation>
-										<gmd:title>
-											<xsl:call-template name="writeCharacterString">
-												<xsl:with-param name="stringToWrite" select="$keywordsVocabulary"/>
-											</xsl:call-template>
-										</gmd:title>
-										<gmd:date>
-											<xsl:attribute name="gco:nilReason"><xsl:value-of select="'unknown'"/></xsl:attribute>
-										</gmd:date>
-									</gmd:CI_Citation>
-								</gmd:thesaurusName>
-							</gmd:MD_Keywords>
-						</gmd:descriptiveKeywords>
-					</xsl:if>
+					
 
 					<xsl:if test="$standardNameCnt">
 						<gmd:descriptiveKeywords>

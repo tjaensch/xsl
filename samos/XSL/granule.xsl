@@ -55,7 +55,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match='gmd:descriptiveKeywords[position() = last()]'>
+  <xsl:template match='gmd:graphicOverview[position() = last()]'>
     <!-- copy all of these keywords. -->
 	<xsl:copy>
     <xsl:apply-templates />
