@@ -22,9 +22,9 @@
 	<xsl:variable name="thredds_netcdfsubsetCnt" select="count(netcdf/group[@name='Dataservicelinks']/group[@name='services']/attribute[@name='nccs_service'])"/>
 
 <!--NCEI-MD added for extra service links -->
-	<xsl:variable name="Pathfinderthredds" select="translate(normalize-space(concat('http://data.nodc.noaa.gov/thredds/catalog/', netcdf/path, 'catalog.html?dataset=',netcdf/path,netcdf/title,'.nc')),' ','')"/>
-	<xsl:variable name="Pathfinderhttp" select="translate(normalize-space(concat('http://data.nodc.noaa.gov/', netcdf/path,netcdf/title,'.nc')),' ','')"/>
-	<xsl:variable name="Pathfinderopendap" select="translate(normalize-space(concat('http://data.nodc.noaa.gov/thredds/dodsC/', netcdf/path,netcdf/title,'.nc.html')),' ','')"/>
+	<xsl:variable name="Pathfinderthredds" select="translate(normalize-space(concat('https://data.nodc.noaa.gov/thredds/catalog/', netcdf/path, 'catalog.html?dataset=',netcdf/path,netcdf/title,'.nc')),' ','')"/>
+	<xsl:variable name="Pathfinderhttp" select="translate(normalize-space(concat('https://data.nodc.noaa.gov/', netcdf/path,netcdf/title,'.nc')),' ','')"/>
+	<xsl:variable name="Pathfinderopendap" select="translate(normalize-space(concat('https://data.nodc.noaa.gov/thredds/dodsC/', netcdf/path,netcdf/title,'.nc.html')),' ','')"/>
 	<xsl:variable name="Pathfinderftp" select="translate(normalize-space(concat('ftp://ftp.nodc.noaa.gov/pub/data.nodc/',netcdf/path,netcdf/title,'.nc')),' ','')"/>
 
 	<!--Added for Cloud pilot project-->
@@ -937,33 +937,6 @@
 													</gmd:description>
 													<gmd:function>
                            								 <gmd:CI_OnLineFunctionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="download">download</gmd:CI_OnLineFunctionCode>
-													</gmd:function>
-												</gmd:CI_OnlineResource>
-											</gmd:onLine>
-										</gmd:MD_DigitalTransferOptions>
-									</gmd:distributorTransferOptions>
-								</xsl:if>
-								<xsl:if test="$browsegraphic">
-									<gmd:distributorTransferOptions>
-										<gmd:MD_DigitalTransferOptions>
-											<gmd:onLine>
-												<gmd:CI_OnlineResource>
-													<gmd:linkage>
-														<gmd:URL>
-															<xsl:value-of select="substring-before($browsegraphic,'&amp;stream=true&amp;stream_ID=plot_image')"/>
-														</gmd:URL>
-													</gmd:linkage>
-													<gmd:protocol>
-														<gco:CharacterString>NOAA:LAS</gco:CharacterString>
-													</gmd:protocol>
-													<gmd:name>
-														<gco:CharacterString>Live Access Server (LAS)</gco:CharacterString>
-													</gmd:name>
-													<gmd:description>
-														<gco:CharacterString>This URL provides a standard HTTP interface for selecting data from this dataset.</gco:CharacterString>
-													</gmd:description>
-													<gmd:function>
-														<gmd:CI_OnLineFunctionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="download">download</gmd:CI_OnLineFunctionCode>
 													</gmd:function>
 												</gmd:CI_OnlineResource>
 											</gmd:onLine>
