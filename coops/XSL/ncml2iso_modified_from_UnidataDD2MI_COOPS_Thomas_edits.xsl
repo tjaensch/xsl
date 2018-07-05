@@ -38,7 +38,7 @@
 	<!-- Text Search Fields: 7 possible -->
 	<!--Need to check with Pathfinder data-->
 	<xsl:variable name="summary" select="netcdf/attribute[@name='summary']/@value"/>
-	<xsl:variable name="keywords" select="netcdf/attribute[@name='keywords']/@value"/>
+	<xsl:variable name="keywords" select="netcdf/keywords_from_standard_names"/>
 	<xsl:variable name="keywordsVocabulary" select="netcdf/attribute[@name='keywords_vocabulary']/@value"/>
 	<xsl:variable name="stdNameVocabulary" select="netcdf/attribute[@name='standard_name_vocabulary']/@value"/>
 	<xsl:variable name="comment" select="netcdf/attribute[@name='comment']/@value"/>
