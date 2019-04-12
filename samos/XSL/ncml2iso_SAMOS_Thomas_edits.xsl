@@ -559,10 +559,10 @@
 															<xsl:value-of select="$temporalUnits"/>
 														</gml:description>
 														<gml:beginPosition>
-															<xsl:value-of select="translate(concat(substring($timeStart,0,5),'-',substring($timeStart,6,2),'-',substring($timeStart,9,2)),' ','')"/>
+															<xsl:value-of select="translate(concat(substring($timeStart,0,5),'-',substring($timeStart,6,2),'-',substring($timeStart,9,2)),' ','0')"/>
 														</gml:beginPosition>
 														<gml:endPosition>
-															<xsl:value-of select="translate(concat(substring($timeEnd,0,5),'-',substring($timeEnd,6,2),'-',substring($timeEnd,9,2)),' ','')"/>
+															<xsl:value-of select="translate(concat(substring($timeEnd,0,5),'-',substring($timeEnd,6,2),'-',substring($timeEnd,9,2)),' ','0')"/>
 														</gml:endPosition>
 													</gml:TimePeriod>
 												</gmd:extent>
